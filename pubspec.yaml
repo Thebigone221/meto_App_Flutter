@@ -1,0 +1,33 @@
+name: meteo_app
+description: "Application météo interactive avec jauge animée et carte Google Maps"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  dio: ^5.7.0
+  retrofit: ^4.10.0
+  google_maps_flutter: ^2.10.0
+  url_launcher: ^6.2.6
+  provider: ^6.1.2
+  flutter_dotenv: ^5.2.0
+  google_fonts: ^6.2.1
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  retrofit_generator: ^10.0.1
+  build_runner: ^2.6.0
+  json_serializable: ^6.10.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
