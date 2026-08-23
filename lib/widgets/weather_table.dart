@@ -17,7 +17,9 @@ class WeatherTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loadedCount = cityStates.where((c) => c.status == CityStatus.success).length;
+    final loadedCount = cityStates
+        .where((c) => c.status == CityStatus.success)
+        .length;
 
     return Column(
       children: [
@@ -62,7 +64,9 @@ class WeatherTable extends StatelessWidget {
               onTap: city.status == CityStatus.success && city.data != null
                   ? () => onCityTap(city.data!)
                   : null,
-              onRetry: city.status == CityStatus.error ? () => onRetry(i) : null,
+              onRetry: city.status == CityStatus.error
+                  ? () => onRetry(i)
+                  : null,
             ),
           );
         }),
@@ -210,7 +214,11 @@ class _ErrorCard extends StatelessWidget {
               color: Colors.red.withAlpha(30),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(Icons.error_outline_rounded, color: Colors.red, size: 24),
+            child: const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+              size: 24,
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -243,13 +251,21 @@ class _ErrorCard extends StatelessWidget {
               icon: const Icon(Icons.refresh_rounded, size: 18),
               label: Text(
                 'Réessayer',
-                style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
               ),
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.white.withAlpha(15),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
               ),
             ),
         ],
@@ -360,7 +376,11 @@ class _SuccessCard extends StatelessWidget {
                   const SizedBox(width: 16),
                   _chip(Icons.air_rounded, '${weather.windSpeed} m/s'),
                   const Spacer(),
-                  Icon(Icons.chevron_right_rounded, color: Colors.white.withAlpha(150), size: 20),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    color: Colors.white.withAlpha(150),
+                    size: 20,
+                  ),
                 ],
               ),
             ),

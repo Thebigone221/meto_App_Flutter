@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../constants.dart';
 import '../providers/weather_provider.dart';
 import '../providers/theme_provider.dart';
 import '../models/weather_model.dart';
@@ -49,16 +50,7 @@ class _WeatherScreenState extends State<WeatherScreen>
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isDark
-                ? [const Color(0xFF1A1A2E), const Color(0xFF10102A), const Color(0xFF080818)]
-                : [const Color(0xFF87CEEB), const Color(0xFFB8E4F0), const Color(0xFFF2F2F7)],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: AppGradients.build(isDark)),
         child: SafeArea(
           child: Column(
             children: [
@@ -66,22 +58,29 @@ class _WeatherScreenState extends State<WeatherScreen>
               Expanded(
                 child: Consumer<WeatherProvider>(
                   builder: (context, provider, _) {
-                    final allEmpty = provider.cityStates.isEmpty && !provider.isLoading;
+                    final allEmpty =
+                        provider.cityStates.isEmpty && !provider.isLoading;
 
                     if (allEmpty && provider.isComplete) {
                       return RefreshIndicator(
                         onRefresh: _onRefresh,
                         color: const Color(0xFF007AFF),
-                        backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+                        backgroundColor: isDark
+                            ? const Color(0xFF1C1C1E)
+                            : Colors.white,
                         child: ListView(
                           children: [
-                            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                            ),
                             Column(
                               children: [
                                 Icon(
                                   Icons.cloud_off_rounded,
                                   size: 48,
-                                  color: isDark ? Colors.white38 : Colors.black26,
+                                  color: isDark
+                                      ? Colors.white38
+                                      : Colors.black26,
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
@@ -89,7 +88,9 @@ class _WeatherScreenState extends State<WeatherScreen>
                                   style: GoogleFonts.inter(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
-                                    color: isDark ? Colors.white70 : const Color(0xFF1C1C1E),
+                                    color: isDark
+                                        ? Colors.white70
+                                        : const Color(0xFF1C1C1E),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -110,7 +111,9 @@ class _WeatherScreenState extends State<WeatherScreen>
                     return RefreshIndicator(
                       onRefresh: _onRefresh,
                       color: const Color(0xFF007AFF),
-                      backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+                      backgroundColor: isDark
+                          ? const Color(0xFF1C1C1E)
+                          : Colors.white,
                       displacement: 40,
                       child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(
@@ -156,7 +159,9 @@ class _WeatherScreenState extends State<WeatherScreen>
                             const SizedBox(height: 16),
                             if (provider.cityStates.isNotEmpty)
                               AnimatedOpacity(
-                                opacity: provider.cityStates.isEmpty ? 0.0 : 1.0,
+                                opacity: provider.cityStates.isEmpty
+                                    ? 0.0
+                                    : 1.0,
                                 duration: const Duration(milliseconds: 800),
                                 curve: Curves.easeInOut,
                                 child: WeatherTable(
@@ -165,25 +170,38 @@ class _WeatherScreenState extends State<WeatherScreen>
                                     Navigator.push(
                                       context,
                                       PageRouteBuilder(
-                                        transitionDuration: const Duration(milliseconds: 500),
-                                        reverseTransitionDuration: const Duration(milliseconds: 300),
-                                        pageBuilder: (ctx, anim, sec) => DetailScreen(weather: city),
-                                        transitionsBuilder: (ctx, animation, sec, child) {
-                                          return SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: const Offset(0, 0.05),
-                                              end: Offset.zero,
-                                            ).animate(CurvedAnimation(
-                                              parent: animation,
-                                              curve: Curves.easeOutCubic,
-                                            )),
-                                            child: child,
-                                          );
-                                        },
+                                        transitionDuration: const Duration(
+                                          milliseconds: 500,
+                                        ),
+                                        reverseTransitionDuration:
+                                            const Duration(milliseconds: 300),
+                                        pageBuilder: (ctx, anim, sec) =>
+                                            DetailScreen(weather: city),
+                                        transitionsBuilder:
+                                            (ctx, animation, sec, child) {
+                                              return SlideTransition(
+                                                position:
+                                                    Tween<Offset>(
+                                                      begin: const Offset(
+                                                        0,
+                                                        0.05,
+                                                      ),
+                                                      end: Offset.zero,
+                                                    ).animate(
+                                                      CurvedAnimation(
+                                                        parent: animation,
+                                                        curve:
+                                                            Curves.easeOutCubic,
+                                                      ),
+                                                    ),
+                                                child: child,
+                                              );
+                                            },
                                       ),
                                     );
                                   },
-                                  onRetry: (int index) => provider.retryCity(index),
+                                  onRetry: (int index) =>
+                                      provider.retryCity(index),
                                 ),
                               ),
                             const SizedBox(height: 80),
@@ -244,7 +262,8 @@ class _WeatherScreenState extends State<WeatherScreen>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
+            onPressed: () =>
+                Navigator.of(context).popUntil((route) => route.isFirst),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               size: 20,
@@ -266,7 +285,9 @@ class _WeatherScreenState extends State<WeatherScreen>
           IconButton(
             onPressed: () => themeProvider.toggleTheme(),
             icon: Icon(
-              themeProvider.isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              themeProvider.isDark
+                  ? Icons.light_mode_rounded
+                  : Icons.dark_mode_rounded,
               size: 22,
               color: isDark ? Colors.white : const Color(0xFF1C1C1E),
             ),

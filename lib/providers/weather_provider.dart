@@ -54,7 +54,9 @@ class WeatherProvider extends ChangeNotifier {
   String get currentMessage => loadingMessages[_messageIndex];
 
   double get progress {
-    final loaded = _cityStates.where((c) => c.status != CityStatus.loading).length;
+    final loaded = _cityStates
+        .where((c) => c.status != CityStatus.loading)
+        .length;
     return loaded / cities.length;
   }
 
@@ -62,14 +64,12 @@ class WeatherProvider extends ChangeNotifier {
     return _cityStates.where((c) => c.status != CityStatus.loading).length;
   }
 
-  int get successCount {
-    return _cityStates.where((c) => c.status == CityStatus.success).length;
-  }
-
   void startLoading() {
     _reset();
     _isLoading = true;
-    _cityStates = cities.map((c) => CityWeather(name: c, status: CityStatus.loading)).toList();
+    _cityStates = cities
+        .map((c) => CityWeather(name: c, status: CityStatus.loading))
+        .toList();
     notifyListeners();
 
     _messageTimer = Timer.periodic(const Duration(seconds: 3), (_) {
@@ -122,7 +122,10 @@ class WeatherProvider extends ChangeNotifier {
 
   void retryCity(int index) async {
     final cityName = cities[index];
-    _cityStates[index] = CityWeather(name: cityName, status: CityStatus.loading);
+    _cityStates[index] = CityWeather(
+      name: cityName,
+      status: CityStatus.loading,
+    );
     notifyListeners();
 
     try {

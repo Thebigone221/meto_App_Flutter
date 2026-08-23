@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../constants.dart';
 import '../models/weather_model.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -13,7 +14,8 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderStateMixin {
+class _DetailScreenState extends State<DetailScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _counterController;
   late Animation<double> _tempAnimation;
 
@@ -24,13 +26,13 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
-    _tempAnimation = Tween<double>(
-      begin: 0,
-      end: widget.weather.temperature,
-    ).animate(CurvedAnimation(
-      parent: _counterController,
-      curve: Curves.easeOutCubic,
-    ));
+    _tempAnimation = Tween<double>(begin: 0, end: widget.weather.temperature)
+        .animate(
+          CurvedAnimation(
+            parent: _counterController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
     _counterController.forward();
   }
 
@@ -54,25 +56,11 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
     };
 
     return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        }
-      },
+      canPop: true,
       child: Scaffold(
         body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isDark
-                ? [const Color(0xFF1A1A2E), const Color(0xFF10102A), const Color(0xFF080818)]
-                : [const Color(0xFF87CEEB), const Color(0xFFB8E4F0), const Color(0xFFF2F2F7)],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: SafeArea(
+          decoration: BoxDecoration(gradient: AppGradients.build(isDark)),
+          child: SafeArea(
             child: Column(
               children: [
                 _buildAppBar(context),
@@ -213,11 +201,23 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _heroStat(Icons.thermostat_rounded, 'Ressenti', '${weather.temperature.toInt()}°'),
+                _heroStat(
+                  Icons.thermostat_rounded,
+                  'Ressenti',
+                  '${weather.temperature.toInt()}°',
+                ),
                 Container(width: 1, height: 24, color: Colors.white30),
-                _heroStat(Icons.water_drop_rounded, 'Humidité', '${weather.humidity}%'),
+                _heroStat(
+                  Icons.water_drop_rounded,
+                  'Humidité',
+                  '${weather.humidity}%',
+                ),
                 Container(width: 1, height: 24, color: Colors.white30),
-                _heroStat(Icons.air_rounded, 'Vent', '${weather.windSpeed} m/s'),
+                _heroStat(
+                  Icons.air_rounded,
+                  'Vent',
+                  '${weather.windSpeed} m/s',
+                ),
               ],
             ),
           ),
@@ -350,9 +350,14 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
               itemBuilder: (context, i) {
                 final e = extras[i];
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF3A3A3C) : const Color(0xFFF2F2F7),
+                    color: isDark
+                        ? const Color(0xFF3A3A3C)
+                        : const Color(0xFFF2F2F7),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Row(
@@ -368,7 +373,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               e.label,
                               style: GoogleFonts.inter(
                                 fontSize: 11,
-                                color: isDark ? const Color(0xFFAEAEB2) : const Color(0xFF8E8E93),
+                                color: isDark
+                                    ? const Color(0xFFAEAEB2)
+                                    : const Color(0xFF8E8E93),
                               ),
                             ),
                             Text(
@@ -376,7 +383,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: isDark ? Colors.white : const Color(0xFF1C1C1E),
+                                color: isDark
+                                    ? Colors.white
+                                    : const Color(0xFF1C1C1E),
                               ),
                             ),
                           ],
@@ -393,7 +402,11 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildMapSection(BuildContext context, LatLng position, Set<Marker> markers) {
+  Widget _buildMapSection(
+    BuildContext context,
+    LatLng position,
+    Set<Marker> markers,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -429,7 +442,10 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
             child: Stack(
               children: [
                 GoogleMap(
-                  initialCameraPosition: CameraPosition(target: position, zoom: 12),
+                  initialCameraPosition: CameraPosition(
+                    target: position,
+                    zoom: 12,
+                  ),
                   markers: markers,
                   myLocationEnabled: false,
                   zoomControlsEnabled: false,
@@ -455,7 +471,11 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.open_in_new_rounded, size: 18, color: Color(0xFF007AFF)),
+                      child: const Icon(
+                        Icons.open_in_new_rounded,
+                        size: 18,
+                        color: Color(0xFF007AFF),
+                      ),
                     ),
                   ),
                 ),
@@ -498,7 +518,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.white,
                   shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
             ),
@@ -514,14 +536,20 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on_rounded, size: 16, color: Color(0xFF007AFF)),
+                const Icon(
+                  Icons.location_on_rounded,
+                  size: 16,
+                  color: Color(0xFF007AFF),
+                ),
                 const SizedBox(width: 8),
                 Text(
                   '${weather.latitude.toStringAsFixed(4)}, ${weather.longitude.toStringAsFixed(4)}',
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color: isDark ? const Color(0xFFAEAEB2) : const Color(0xFF8E8E93),
+                    color: isDark
+                        ? const Color(0xFFAEAEB2)
+                        : const Color(0xFF8E8E93),
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -535,7 +563,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
 
   Future<void> _openGoogleMaps() async {
     final weather = widget.weather;
-    final url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${weather.latitude},${weather.longitude}');
+    final url = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=${weather.latitude},${weather.longitude}',
+    );
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }
@@ -547,7 +577,11 @@ class _ExtraDetail {
   final String label;
   final String value;
 
-  const _ExtraDetail({required this.icon, required this.label, required this.value});
+  const _ExtraDetail({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 }
 
 class _InfoCard extends StatelessWidget {

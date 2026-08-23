@@ -1,4 +1,4 @@
-﻿import 'dart:math' as math;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class WeatherGauge extends StatefulWidget {
@@ -31,24 +31,25 @@ class _WeatherGaugeState extends State<WeatherGauge>
     _animProgress = Tween<double>(begin: 0, end: 0).animate(
       CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
     );
+    _animController.addListener(() {
+      setState(() {
+        _displayProgress = _animProgress.value;
+      });
+    });
   }
 
   @override
   void didUpdateWidget(WeatherGauge oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.progress != oldWidget.progress) {
-      _animProgress = Tween<double>(
-        begin: _displayProgress,
-        end: widget.progress,
-      ).animate(
-        CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
-      );
+      _animProgress =
+          Tween<double>(begin: _displayProgress, end: widget.progress).animate(
+            CurvedAnimation(
+              parent: _animController,
+              curve: Curves.easeOutCubic,
+            ),
+          );
       _animController.forward(from: 0);
-      _animController.addListener(() {
-        setState(() {
-          _displayProgress = _animProgress.value;
-        });
-      });
     }
   }
 
@@ -106,9 +107,14 @@ class CloudGauge extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final activeColor = isDark ? const Color(0xFF60A5FA) : const Color(0xFF3B82F6);
-    final inactiveColor = isDark ? const Color(0x40FFFFFF) : const Color(0x33000000);
-    final textColor = Theme.of(context).textTheme.headlineMedium?.color ??
+    final activeColor = isDark
+        ? const Color(0xFF60A5FA)
+        : const Color(0xFF3B82F6);
+    final inactiveColor = isDark
+        ? const Color(0x40FFFFFF)
+        : const Color(0x33000000);
+    final textColor =
+        Theme.of(context).textTheme.headlineMedium?.color ??
         (isDark ? Colors.white : Colors.black87);
 
     final path = buildCloudPath(Size(width, height));
@@ -249,7 +255,10 @@ class _CloudOutlinePainter extends CustomPainter {
     if (isDark) {
       final shadowRadius = 36.0 * sx;
       final shadowCenter = Offset(192 * sx, 62 * sy);
-      final shadowMask = Offset(shadowCenter.dx + 14 * sx, shadowCenter.dy - 10 * sy);
+      final shadowMask = Offset(
+        shadowCenter.dx + 14 * sx,
+        shadowCenter.dy - 10 * sy,
+      );
       final shadowPaint = Paint()..color = const Color(0x20C0C0D0);
       canvas.drawCircle(shadowCenter, shadowRadius, shadowPaint);
       final shadowCutPaint = Paint()..color = const Color(0xFF10102A);

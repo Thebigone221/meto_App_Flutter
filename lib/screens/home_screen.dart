@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../constants.dart';
 import 'weather_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,24 +12,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isDark
-                ? [
-                    const Color(0xFF1A1A2E),
-                    const Color(0xFF10102A),
-                    const Color(0xFF080818),
-                  ]
-                : [
-                    const Color(0xFF87CEEB),
-                    const Color(0xFFB8E4F0),
-                    const Color(0xFFF2F2F7),
-                  ],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: AppGradients.build(isDark)),
         child: SafeArea(
           child: Center(
             child: Padding(
@@ -56,7 +40,9 @@ class HomeScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFFD60A).withAlpha(isDark ? 25 : 30),
+                          color: const Color(
+                            0xFFFFD60A,
+                          ).withAlpha(isDark ? 25 : 30),
                           blurRadius: 40,
                           spreadRadius: 5,
                         ),
@@ -85,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 17,
                       fontWeight: FontWeight.w400,
-                      color: isDark ? const Color(0xFF8E8E93) : const Color(0xFF8E8E93),
+                      color: const Color(0xFF8E8E93),
                       height: 1.4,
                     ),
                   ),
@@ -95,8 +81,11 @@ class HomeScreen extends StatelessWidget {
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           transitionDuration: const Duration(milliseconds: 600),
-                          reverseTransitionDuration: const Duration(milliseconds: 400),
-                          pageBuilder: (ctx, anim, sec) => const WeatherScreen(),
+                          reverseTransitionDuration: const Duration(
+                            milliseconds: 400,
+                          ),
+                          pageBuilder: (ctx, anim, sec) =>
+                              const WeatherScreen(),
                           transitionsBuilder: (ctx, animation, sec, child) {
                             return FadeTransition(
                               opacity: CurvedAnimation(
@@ -150,7 +139,9 @@ class _LaunchButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.white,
             shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
