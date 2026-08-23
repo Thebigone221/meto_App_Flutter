@@ -17,3 +17,5 @@ flutter run
 
 flutter build apk --release
 ```
+# Cles API monsieur car github bloque a mettre dans le env
+6ede28db8404bfe31c3b6f815bc3256f
